@@ -89,12 +89,24 @@ No hay CLI de Turso autenticado en la VM: el seed usa
 
 ## Despliegue
 
-**Bloqueado (13 nov 2026):** el conector de Vercel perdió el acceso
-al equipo `tecnobum` (403 en todos los despliegues). No se creó
-proyecto Vercel. Para desplegar, Johan debe reautorizar el acceso al
-equipo tecnobum en la conexión de Vercel (desconectar y reconectar) y
-luego crear el proyecto desde `~/workspace/mis-apks/` con las variables
-de entorno `TURSO_DATABASE_URL` y `TURSO_AUTH_TOKEN`.
+**EN VIVO en GitHub Pages (13 nov 2026): https://tecnobum.github.io/mis-apks/** —
+repo público `TecnoBum/mis-apks`, rama `main`. Para republicar tras un
+cambio, reconstruir la versión estática y subirla:
+
+```bash
+./scripts/build-pages.sh   # deja el sitio en /tmp/mis-apks-pages/out
+# copiar out/ a ~/workspace/mis-apks/pages-out/ y subir con el conector
+# de GitHub (push-files) a la rama main del repo TecnoBum/mis-apks
+```
+
+Lecciones de Pages (13 nov 2026): la exportación estática necesita
+`basePath: "/mis-apks"` en `next.config.mjs` (si no, los assets salen
+como `/_next/...` y dan 404) y un archivo `.nojekyll` vacío en la raíz
+del sitio (Jekyll ignora las carpetas con `_`, como `_next`).
+
+**Bloqueado:** el despliegue en Vercel (403, equipo tecnobum) sigue
+pendiente de que Johan reautorice el acceso al equipo en la conexión
+de Vercel. No se creó proyecto Vercel.
 
 ## Qué falta para la ejecución automática total
 
