@@ -7,8 +7,19 @@ para automatizar el flujo que hoy se hace a mano con el agente:
 **AppCreator24 → descargar APK → firmar con el keystore → subir a Apklis
 como nueva versión → verificar en consola.**
 
-## Estado (v1.1.0 — 20 nov 2026)
+## Estado (v1.2.0 — 20 nov 2026)
 
+- Icono real de cada app junto a su nombre: extraídos de las APK firmadas
+  locales con `scripts/extraer-iconos.py` (las 11 de AppCreator24 se leen
+  del manifiesto con `aapt2 dump badging`; Mis Tarjetas se dibuja fiel
+  desde su vector `ic_launcher.xml` porque no tiene PNG). Van embebidos
+  en base64 en `lib/icons.ts` (generados desde `public/icons/`): el
+  conector de GitHub rechaza archivos binarios en el push, así que los
+  PNG no se suben como archivos al repo.
+- Diseño móvil: la tabla se vuelve tarjetas (una por app) en pantallas
+  estrechas, cabecera fija, botones de 44 px, aviso cuando no hay
+  conexión y botón **Compartir** por app (usa el menú de compartir del
+  teléfono y si no, copia el pedido).
 - Dashboard con las 25 apps (11 de pago + 14 excepciones): nombre,
   paquete, versión en Apklis (con nº de versiones y fecha de última
   actualización), origen (AppCreator24 o nativa/WebView), estado, ojo
@@ -69,6 +80,7 @@ mis-apks/
 │   └── InterruptorTema.tsx # Toggle claro/oscuro
 ├── lib/
 │   ├── types.ts            # App, Job, Alerta
+│   ├── icons.ts            # Iconos de las 25 apps en base64 (ver README)
 │   ├── seed-data.ts        # Datos semilla + cálculo de alertas
 │   └── turso.ts            # Cliente Turso y consultas
 ├── data/apps.json          # Semilla: 25 apps con su estado (20 nov 2026)
