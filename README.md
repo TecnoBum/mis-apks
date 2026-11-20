@@ -7,8 +7,37 @@ para automatizar el flujo que hoy se hace a mano con el agente:
 **AppCreator24 → descargar APK → firmar con el keystore → subir a Apklis
 como nueva versión → verificar en consola.**
 
-## Estado (v1.2.0 — 20 nov 2026)
+## Estado (v1.3.0 — 20 nov 2026, construida; publicación pendiente junto al catálogo completo de 53 apps y el área de Ingresos)
 
+- **Orden por defecto: última actualización, de más antigua a más
+  reciente** (usa el campo real `actualizada_en` de `data/apps.json`;
+  las apps sin fecha conocida van primero, que son las que más tiempo
+  llevan sin actualizar). Botón para invertir la dirección («Más
+  reciente primero»). Se mantienen los órdenes por nombre, precio y
+  nº de versiones.
+- **Actualizaciones programadas**: botón «Programar» en cada app y
+  «Programar ronda» junto a la ronda completa, con selector de fecha
+  (mínimo hoy, validado). La programación se guarda en el dispositivo
+  (localStorage, clave `misapks_programadas`) y se muestra un
+  distintivo con la fecha en la tarjeta de la app («Programada: 25 nov
+  2026»; «Vencida: …» si pasó la fecha). Sección «Programadas» con la
+  lista (app, fecha, tipo app/ronda) y botón para cancelar cada una.
+  **El panel es estático y no ejecuta nada**: al programar o cancelar
+  se copia al portapapeles el mensaje para pegarlo en el chat —
+  «Programa la actualización de \<Nombre\> para el \<fecha\>»,
+  «Programa la ronda completa (17 apps) para el \<fecha\>» o
+  «Cancela la actualización programada de \<Nombre\> para el
+  \<fecha\>» — y el asistente crea la programación; el día señalado
+  construye la versión nueva y pide la contraseña del keystore para
+  firmar y subir.
+- **Uso de Muse**: sección con el % usado (barra de progreso), el %
+  restante en grande, el plan, la fecha de restablecimiento del límite
+  y cuándo se actualizó el dato (datos reales de `data/uso.json`,
+  leídos en el build; tipo `UsoMuse` en `lib/types.ts`, validado en
+  `lib/seed-data.ts`). Si se llega al 90% (`limite_90`), la sección
+  avisa de que las tareas grandes están en pausa hasta el
+  restablecimiento. Sin datos (o con datos inválidos), muestra «sin
+  datos» sin romper el panel.
 - Icono real de cada app junto a su nombre: extraídos de las APK firmadas
   locales con `scripts/extraer-iconos.py` (las 11 de AppCreator24 se leen
   del manifiesto con `aapt2 dump badging`; Mis Tarjetas se dibuja fiel
@@ -119,9 +148,16 @@ No hay CLI de Turso autenticado en la VM: el seed usa
 
 ## Despliegue
 
-**EN VIVO en GitHub Pages (13 nov 2026): https://tecnobum.github.io/mis-apks/** —
-repo público `TecnoBum/mis-apks`, rama `main`. Para republicar tras un
-cambio, reconstruir la versión estática y subirla:
+**EN VIVO en GitHub Pages: https://tecnobum.github.io/mis-apks/** — repo
+público `TecnoBum/mis-apks`, rama `main`. **v1.2.0 (20 nov 2026, commit
+12050095, VERIFICADO en vivo)**: iconos de las 25 apps, diseño móvil con
+tarjetas, cabecera fija y Compartir. **v1.3.0 (20 nov 2026, construida,
+SIN publicar)**: orden por defecto por fecha de actualización y
+actualizaciones programadas; la salida está en `/tmp/mis-apks-pages/out`
+para fusionarla con el catálogo completo de 53 apps y el área de
+Ingresos y publicar una sola vez.
+**APK (20 nov 2026)**: proyecto `~/workspace/mis-apks-apk/` (WebView del panel, paquete `com.tecnobum.misapks`, v1.0.0 vc1, COMPILADA y VERIFICADA, SIN FIRMAR — falta la contraseña del keystore de Johan). Para republicar tras un cambio,
+reconstruir la versión estática y subirla:
 
 ```bash
 ./scripts/build-pages.sh   # deja el sitio en /tmp/mis-apks-pages/out
