@@ -7,20 +7,38 @@ para automatizar el flujo que hoy se hace a mano con el agente:
 **AppCreator24 → descargar APK → firmar con el keystore → subir a Apklis
 como nueva versión → verificar en consola.**
 
-## Estado (v1.0.0)
+## Estado (v1.1.0 — 20 nov 2026)
 
-- Dashboard con las 20 apps (11 de pago + 9 excepciones): nombre,
-  paquete, versión en Apklis, versión en AppCreator24, estado, ojo
+- Dashboard con las 25 apps (11 de pago + 14 excepciones): nombre,
+  paquete, versión en Apklis (con nº de versiones y fecha de última
+  actualización), origen (AppCreator24 o nativa/WebView), estado, ojo
   abierto/cerrado, precio y notas.
-- Botón **Actualizar** por app y **Ronda completa (11 de pago)**.
-  Al pulsar, el trabajo se crea en la cola en estado `pendiente`.
-  **El panel NO ejecuta la subida**: la ejecución la hace el agente
-  (hoy no existe API pública de AppCreator24 ni de Apklis).
+- **Generabilidad por app**: insignia «Sí» / «Sí, subida bloqueada» /
+  «No se puede generar», con la vía (AppCreator24, Nativa aapt2 o
+  WebView aapt2) y el motivo del bloqueo. 21 generables, 4 con la
+  subida bloqueada (Mis Tarjetas, Antivirus Actualización, Mi Línea y
+  MultiHerramientas CU). El resto de fichas de la cuenta (53 en total)
+  aún no está catalogado.
+- Buscador por nombre o paquete; filtros por grupo, generable y
+  estado; orden por nombre, precio, nº de versiones o última
+  actualización. Enlaces directos a la ficha en tienda y en consola.
+- Resumen con la cuenta Apklis (53 fichas, 166.3k descargas, 573
+  versiones, 32 aceptadas, 0 en revisión — revisión 20 nov 11:00).
+- Botón **Actualizar** por app (o **Crear ficha** si no tiene ficha) y
+  **Ronda completa (17 apps)**: 11 de pago + 6 de la lista ampliada
+  del 14 nov (Medicina Clínica, Tasa Cuba, TV Online, Gestor - Mi
+  Negocio, Klick, Mi Licencia). Al pulsar, el trabajo se crea en la
+  cola en estado `pendiente`. **El panel NO ejecuta la subida**: la
+  ejecución la hace el agente (hoy no existe API pública de
+  AppCreator24 ni de Apklis).
+- **CORREGIDO (20 nov): en GitHub Pages los botones estaban
+  deshabilitados** (pedían Turso). Ahora en modo estático copian el
+  pedido completo —con versión y vía— para pegarlo en el chat.
 - Historial de rondas y trabajos con estado por trabajo
   (pendiente / en curso / publicada / fallida / parcial).
-- Alertas visibles: ojo cerrado (Guía de Economistas), versión de
-  AppCreator24 distinta a la de Apklis, ficha sin publicar y registros
-  huérfanos.
+- Alertas visibles: ojo cerrado, ficha sin publicar, registros
+  huérfanos, subida bloqueada y versión de AppCreator24 distinta a
+  la de Apklis.
 - Interruptor de modo claro/oscuro, mobile-first, iconos SVG, sin
   emojis en la interfaz. Textos en español.
 
@@ -53,7 +71,7 @@ mis-apks/
 │   ├── types.ts            # App, Job, Alerta
 │   ├── seed-data.ts        # Datos semilla + cálculo de alertas
 │   └── turso.ts            # Cliente Turso y consultas
-├── data/apps.json          # Semilla: 20 apps con su estado (13 nov 2026)
+├── data/apps.json          # Semilla: 25 apps con su estado (20 nov 2026)
 ├── schema.sql              # Tablas misapks_apps / misapks_jobs
 └── scripts/seed.mjs        # Crea tablas y carga la semilla en Turso
 ```
@@ -81,7 +99,7 @@ Para activar la base de datos (una sola vez):
 # En las variables de entorno de Vercel (o en local, sin guardarlas):
 #   TURSO_DATABASE_URL=libsql://...
 #   TURSO_AUTH_TOKEN=...
-npm run db:seed     # crea las tablas y carga las 20 apps
+npm run db:seed     # crea las tablas y carga las 25 apps
 ```
 
 No hay CLI de Turso autenticado en la VM: el seed usa
@@ -103,6 +121,9 @@ Lecciones de Pages (13 nov 2026): la exportación estática necesita
 `basePath: "/mis-apks"` en `next.config.mjs` (si no, los assets salen
 como `/_next/...` y dan 404) y un archivo `.nojekyll` vacío en la raíz
 del sitio (Jekyll ignora las carpetas con `_`, como `_next`).
+**v1.1.0 (20 nov 2026)**: en modo estático los botones de actualizar
+copian el pedido al portapapeles (antes estaban deshabilitados sin
+Turso).
 
 **Bloqueado:** el despliegue en Vercel (403, equipo tecnobum) sigue
 pendiente de que Johan reautorice el acceso al equipo en la conexión
